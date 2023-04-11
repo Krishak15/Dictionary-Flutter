@@ -1,6 +1,10 @@
+import 'dart:ui';
+
+import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_api/animations/lava_lamp/lava_clock.dart';
 import 'package:gym_api/views/definitions_screen.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
@@ -82,223 +86,264 @@ class _DetailsViewState extends State<DetailsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: widget.color,
+        color: Colors.white,
         height: double.infinity,
         width: double.infinity,
         child: SingleChildScrollView(
-          child: Column(
+          child: Stack(
             children: [
-              const SizedBox(
-                height: 10,
-              ),
-              Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          widget.partOfSpeech.toString(),
-                          style: GoogleFonts.poppins(
-                              fontSize: 18, fontWeight: FontWeight.w500),
-                        ),
-                        link != 0
-                            ? Text(
-                                ', ${widget.partOfSpeech2![link]['partOfSpeech'].toString()}',
-                                style: GoogleFonts.poppins(
-                                    fontSize: 18, fontWeight: FontWeight.w500),
-                              )
-                            : const SizedBox()
-                      ],
-                    ),
-                  )),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.3),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
-                child: InkWell(
-                  onTap: () {
-                    print(widget.partOfSpeech2!.length);
-                    print(widget.partOfSpeech2);
-                  },
-                  child: Text(
-                    widget.word.toString(),
-                    style: GoogleFonts.elsieSwashCaps(
-                        fontSize: 45, fontWeight: FontWeight.w600),
+              Center(
+                  child: LavaAnimation(
+                      color: Colors.red,
+                      child: Container(
+                        // blur: 10,
+                        height: MediaQuery.of(context).size.height * 1.8,
+                        width: MediaQuery.of(context).size.width * 1.5,
+                        child: const SizedBox(),
+                      ))),
+              Center(
+                  child: LavaAnimation(
+                      color: Color.fromARGB(255, 26, 94, 179),
+                      child: Container(
+                        // blur: 20,
+                        height: MediaQuery.of(context).size.height * 1.8,
+                        width: MediaQuery.of(context).size.width,
+                        child: const SizedBox(),
+                      ))),
+              Center(
+                  child: LavaAnimation(
+                      color: widget.color,
+                      child: Container(
+                        // blur: 70,
+                        height: MediaQuery.of(context).size.height * 1.8,
+                        width: MediaQuery.of(context).size.width * 1.5,
+                        child: const SizedBox(),
+                      ))),
+              Positioned.fill(
+                  child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: SizedBox(),
+              )),
+              Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-              ),
-              Text(
-                widget.phonetic.toString(),
-                style: const TextStyle(fontSize: 16),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.15,
-              ),
-              Container(
-                  height: 30,
-                  width: 30,
-                  child:
-                      Lottie.asset('lib/animations/scroll-down-circle.json')),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.05,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
-                child: Text(
-                  widget.definition.toString(),
-                  style: GoogleFonts.elsieSwashCaps(
-                      fontSize: 35, fontWeight: FontWeight.w600),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(30.0),
-                child: Center(
-                  child: Container(
-                      height: 50,
-                      width: 160,
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Colors.grey.shade800, width: 1),
-                          borderRadius: BorderRadius.circular(30)),
+                  Align(
+                      alignment: Alignment.topLeft,
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          onTap: () {
-                            print(widget.def!.length);
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => DefinitionsScreen(
-                                color: widget.color,
-                                defs: widget.def,
-                                def2: widget.partOfSpeech2,
-                                def1: widget.partOfSpeech,
-                              ),
-                            ));
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                'More Definitions',
-                                style: GoogleFonts.poppins(
-                                    color: Colors.grey.shade800,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.grey.shade800,
-                                size: 15,
-                              )
-                            ],
-                          ),
+                        padding: const EdgeInsets.all(20.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              widget.partOfSpeech.toString(),
+                              style: GoogleFonts.poppins(
+                                  fontSize: 18, fontWeight: FontWeight.w500),
+                            ),
+                            link != 0
+                                ? Text(
+                                    ', ${widget.partOfSpeech2![link]['partOfSpeech'].toString()}',
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                  )
+                                : const SizedBox()
+                          ],
                         ),
                       )),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Divider(thickness: 2),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              widget.synonyms!.isNotEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20.0, left: 20, right: 20, bottom: 15),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.3),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 20.0, left: 20, right: 20),
+                    child: InkWell(
+                      onTap: () {
+                        print(widget.partOfSpeech2!.length);
+                        print(widget.partOfSpeech2);
+                      },
                       child: Text(
-                        'Synonyms',
+                        widget.word.toString(),
                         style: GoogleFonts.elsieSwashCaps(
-                            fontSize: 40, fontWeight: FontWeight.w600),
+                            fontSize: 45, fontWeight: FontWeight.w600),
                       ),
-                    )
-                  : const SizedBox(),
-              widget.synonyms!.isNotEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.all(15.0),
+                    ),
+                  ),
+                  Text(
+                    widget.phonetic.toString(),
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.15,
+                  ),
+                  Container(
+                      height: 30,
+                      width: 30,
+                      child: Lottie.asset(
+                          'lib/animations/scroll-down-circle.json')),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 20.0, left: 20, right: 20),
+                    child: Text(
+                      widget.definition.toString(),
+                      style: GoogleFonts.elsieSwashCaps(
+                          fontSize: 35, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: Center(
                       child: Container(
-                        height: 300,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 2, color: Colors.black.withOpacity(0.2)),
-                            borderRadius: BorderRadius.circular(25)),
-                        child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 20.0, left: 20, right: 20),
-                            child: ListView.builder(
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: widget.synonyms!.length,
-                              itemBuilder: (context, index) {
-                                return Text(
-                                  widget.synonyms![index].toString(),
-                                  style: GoogleFonts.elsieSwashCaps(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.w600),
-                                );
-                              },
-                            )),
-                      ),
-                    )
-                  : const SizedBox(),
-              widget.sound!.isNotEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.only(
-                        top: 20.0,
-                        left: 20,
-                        right: 20,
-                      ),
-                      child: Text(
-                        'Sound',
-                        style: GoogleFonts.elsieSwashCaps(
-                            fontSize: 40, fontWeight: FontWeight.w600),
-                      ),
-                    )
-                  : const SizedBox(),
-              widget.sound!.isNotEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Container(
-                        height: 50,
-                        width: 160,
-                        decoration: BoxDecoration(
-                            border: Border.all(width: 1),
-                            borderRadius: BorderRadius.circular(30)),
-                        child: InkWell(
-                            onTap: () {
-                              playAudio();
-                              Future.delayed(
-                                const Duration(
-                                  milliseconds: 500,
-                                ),
-                                () {
-                                  setState(() {});
-                                },
-                              );
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  player.playerState.playing
-                                      ? 'Replay'
-                                      : 'Play',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    player.playerState.playing
-                                        ? Icons.replay
-                                        : Icons.play_arrow_outlined,
-                                    size: 26,
+                          height: 50,
+                          width: 160,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.grey.shade800, width: 1),
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              onTap: () {
+                                print(widget.def!.length);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => DefinitionsScreen(
+                                    color: widget.color,
+                                    defs: widget.def,
+                                    def2: widget.partOfSpeech2,
+                                    def1: widget.partOfSpeech,
                                   ),
-                                ),
-                              ],
-                            )),
-                      ),
-                    )
-                  : const SizedBox()
+                                ));
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    'More Definitions',
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.grey.shade800,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Colors.grey.shade800,
+                                    size: 15,
+                                  )
+                                ],
+                              ),
+                            ),
+                          )),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Divider(thickness: 2),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  widget.synonyms!.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20.0, left: 20, right: 20, bottom: 15),
+                          child: Text(
+                            'Synonyms',
+                            style: GoogleFonts.elsieSwashCaps(
+                                fontSize: 40, fontWeight: FontWeight.w600),
+                          ),
+                        )
+                      : const SizedBox(),
+                  widget.synonyms!.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Container(
+                            height: 300,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 2,
+                                    color: Colors.black.withOpacity(0.2)),
+                                borderRadius: BorderRadius.circular(25)),
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 20.0, left: 20, right: 20),
+                                child: ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: widget.synonyms!.length,
+                                  itemBuilder: (context, index) {
+                                    return Text(
+                                      widget.synonyms![index].toString(),
+                                      style: GoogleFonts.elsieSwashCaps(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.w600),
+                                    );
+                                  },
+                                )),
+                          ),
+                        )
+                      : const SizedBox(),
+                  widget.sound!.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(
+                            top: 20.0,
+                            left: 20,
+                            right: 20,
+                          ),
+                          child: Text(
+                            'Sound',
+                            style: GoogleFonts.elsieSwashCaps(
+                                fontSize: 40, fontWeight: FontWeight.w600),
+                          ),
+                        )
+                      : const SizedBox(),
+                  widget.sound!.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Container(
+                            height: 50,
+                            width: 160,
+                            decoration: BoxDecoration(
+                                border: Border.all(width: 1),
+                                borderRadius: BorderRadius.circular(30)),
+                            child: InkWell(
+                                onTap: () {
+                                  playAudio();
+                                  Future.delayed(
+                                    const Duration(
+                                      milliseconds: 500,
+                                    ),
+                                    () {
+                                      setState(() {});
+                                    },
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      player.playerState.playing
+                                          ? 'Replay'
+                                          : 'Play',
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        player.playerState.playing
+                                            ? Icons.replay
+                                            : Icons.play_arrow_outlined,
+                                        size: 26,
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                          ),
+                        )
+                      : const SizedBox()
+                ],
+              ),
             ],
           ),
         ),

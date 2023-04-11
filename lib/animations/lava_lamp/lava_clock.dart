@@ -36,9 +36,10 @@ class LavaAnimationState extends State<LavaAnimation>
         animation: _animation,
         builder: (BuildContext context, _) => CustomPaint(
           size: const Size(100, 100),
-          painter: LavaPainter(lava, color: Color.fromARGB(255, 255, 255, 255)
-              // widget.color ?? Theme.of(context).colorScheme.primary,
-              ),
+          painter: LavaPainter(
+            lava,
+            color: widget.color ?? Theme.of(context).colorScheme.primary,
+          ),
           child: widget.child,
         ),
       ),
