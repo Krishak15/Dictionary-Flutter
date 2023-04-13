@@ -9,4 +9,14 @@ List<Color> predefinedColors = [
   Color.fromARGB(255, 255, 208, 137),
   Color.fromARGB(255, 139, 255, 243),
   Color.fromARGB(255, 255, 152, 186),
+  Colors.amberAccent,
+  Colors.pinkAccent,
+  Colors.deepOrangeAccent,
+  Colors.tealAccent,
+  Colors.blueAccent,
+  Colors.greenAccent,
+  Colors.purpleAccent,
+  Colors.redAccent,
+  Colors.orangeAccent,
+  Colors.yellowAccent
 ];

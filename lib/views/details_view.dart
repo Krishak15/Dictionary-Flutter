@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
+import 'package:glassmorphism/glassmorphism.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_api/animations/lava_lamp/lava_clock.dart';
@@ -46,7 +46,6 @@ class _DetailsViewState extends State<DetailsView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fixRangeError();
     loadAud();
@@ -57,8 +56,7 @@ class _DetailsViewState extends State<DetailsView> {
   }
 
   playAudio() async {
-    print(
-        '---------------------------------------------${widget.sound.toString()}');
+    print('--------${widget.sound.toString()}');
     await player.setUrl(widget.sound.toString());
     player.load();
     player.play();
@@ -94,10 +92,15 @@ class _DetailsViewState extends State<DetailsView> {
             children: [
               Center(
                   child: LavaAnimation(
-                      color: Colors.red,
+                      color: Colors.redAccent,
                       child: Container(
                         // blur: 10,
-                        height: MediaQuery.of(context).size.height * 1.8,
+                        height: widget.synonyms!.isNotEmpty &&
+                                widget.sound!.isNotEmpty
+                            ? MediaQuery.of(context).size.height * 1.8
+                            : widget.sound!.isNotEmpty
+                                ? MediaQuery.of(context).size.height * 1.7
+                                : MediaQuery.of(context).size.height * 1.2,
                         width: MediaQuery.of(context).size.width * 1.5,
                         child: const SizedBox(),
                       ))),
@@ -106,7 +109,9 @@ class _DetailsViewState extends State<DetailsView> {
                       color: Color.fromARGB(255, 26, 94, 179),
                       child: Container(
                         // blur: 20,
-                        height: MediaQuery.of(context).size.height * 1.8,
+                        height: widget.synonyms!.isNotEmpty
+                            ? MediaQuery.of(context).size.height * 1.8
+                            : MediaQuery.of(context).size.height * 1.2,
                         width: MediaQuery.of(context).size.width,
                         child: const SizedBox(),
                       ))),
@@ -115,15 +120,57 @@ class _DetailsViewState extends State<DetailsView> {
                       color: widget.color,
                       child: Container(
                         // blur: 70,
-                        height: MediaQuery.of(context).size.height * 1.8,
+                        height: widget.synonyms!.isNotEmpty
+                            ? MediaQuery.of(context).size.height * 1.8
+                            : MediaQuery.of(context).size.height * 1.2,
                         width: MediaQuery.of(context).size.width * 1.5,
                         child: const SizedBox(),
                       ))),
-              Positioned.fill(
-                  child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                child: SizedBox(),
-              )),
+              Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: GlassmorphicContainer(
+                    blur: 10,
+                    borderRadius: 24,
+                    linearGradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        widget.color!.withOpacity(0.2),
+                        Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .color!
+                            .withOpacity(0.02),
+                      ],
+                      stops: const [0.1, 1],
+                    ),
+                    borderGradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .color!
+                            .withOpacity(0.2),
+                        Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .color!
+                            .withOpacity(0.1),
+                      ],
+                    ),
+                    border: 0.1,
+                    height: widget.synonyms!.isNotEmpty && widget.sound!.isEmpty
+                        ? MediaQuery.of(context).size.height * 1.8
+                        : widget.synonyms!.isNotEmpty &&
+                                widget.sound!.isNotEmpty
+                            ? MediaQuery.of(context).size.height * 1.95
+                            : widget.synonyms!.isEmpty && widget.sound!.isEmpty
+                                ? MediaQuery.of(context).size.height * 1.2
+                                : MediaQuery.of(context).size.height * 1.4,
+                    width: MediaQuery.of(context).size.width,
+                  )),
               Column(
                 children: [
                   const SizedBox(
@@ -132,7 +179,7 @@ class _DetailsViewState extends State<DetailsView> {
                   Align(
                       alignment: Alignment.topLeft,
                       child: Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.only(top: 30.0, left: 40),
                         child: Row(
                           children: [
                             Text(
@@ -155,16 +202,10 @@ class _DetailsViewState extends State<DetailsView> {
                   Padding(
                     padding:
                         const EdgeInsets.only(top: 20.0, left: 20, right: 20),
-                    child: InkWell(
-                      onTap: () {
-                        print(widget.partOfSpeech2!.length);
-                        print(widget.partOfSpeech2);
-                      },
-                      child: Text(
-                        widget.word.toString(),
-                        style: GoogleFonts.elsieSwashCaps(
-                            fontSize: 45, fontWeight: FontWeight.w600),
-                      ),
+                    child: Text(
+                      widget.word.toString(),
+                      style: GoogleFonts.elsieSwashCaps(
+                          fontSize: 45, fontWeight: FontWeight.w600),
                     ),
                   ),
                   Text(
@@ -184,11 +225,24 @@ class _DetailsViewState extends State<DetailsView> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsets.only(top: 20.0, left: 20, right: 20),
-                    child: Text(
-                      widget.definition.toString(),
-                      style: GoogleFonts.elsieSwashCaps(
-                          fontSize: 35, fontWeight: FontWeight.w600),
+                        const EdgeInsets.only(top: 20.0, left: 40, right: 40),
+                    child: Container(
+                      height: 300,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 2, color: Colors.black.withOpacity(0.2)),
+                          borderRadius: BorderRadius.circular(25)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: Text(
+                            widget.definition.toString(),
+                            style: GoogleFonts.elsieSwashCaps(
+                                fontSize: 32, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   Padding(
@@ -206,14 +260,44 @@ class _DetailsViewState extends State<DetailsView> {
                             child: InkWell(
                               onTap: () {
                                 print(widget.def!.length);
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => DefinitionsScreen(
-                                    color: widget.color,
-                                    defs: widget.def,
-                                    def2: widget.partOfSpeech2,
-                                    def1: widget.partOfSpeech,
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //   builder: (context) => DefinitionsScreen(
+                                //     color: widget.color,
+                                //     defs: widget.def,
+                                //     def2: widget.partOfSpeech2,
+                                //     def1: widget.partOfSpeech,
+                                //   ),
+                                // ));
+
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    transitionDuration:
+                                        Duration(milliseconds: 500),
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        DefinitionsScreen(
+                                      color: widget.color,
+                                      defs: widget.def,
+                                      def2: widget.partOfSpeech2,
+                                      def1: widget.partOfSpeech,
+                                    ),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      var begin = Offset(0.0, 1.0);
+                                      var end = Offset.zero;
+                                      var curve = Curves.ease;
+
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve));
+
+                                      return SlideTransition(
+                                        position: animation.drive(tween),
+                                        child: child,
+                                      );
+                                    },
                                   ),
-                                ));
+                                );
                               },
                               child: Row(
                                 mainAxisAlignment:
@@ -237,7 +321,7 @@ class _DetailsViewState extends State<DetailsView> {
                     ),
                   ),
                   const Padding(
-                    padding: EdgeInsets.all(20.0),
+                    padding: EdgeInsets.only(left: 40.0, right: 40),
                     child: Divider(thickness: 2),
                   ),
                   const SizedBox(
@@ -246,7 +330,10 @@ class _DetailsViewState extends State<DetailsView> {
                   widget.synonyms!.isNotEmpty
                       ? Padding(
                           padding: const EdgeInsets.only(
-                              top: 20.0, left: 20, right: 20, bottom: 15),
+                            top: 20.0,
+                            left: 20,
+                            right: 20,
+                          ),
                           child: Text(
                             'Synonyms',
                             style: GoogleFonts.elsieSwashCaps(
@@ -256,7 +343,7 @@ class _DetailsViewState extends State<DetailsView> {
                       : const SizedBox(),
                   widget.synonyms!.isNotEmpty
                       ? Padding(
-                          padding: const EdgeInsets.all(15.0),
+                          padding: const EdgeInsets.all(40.0),
                           child: Container(
                             height: 300,
                             decoration: BoxDecoration(
